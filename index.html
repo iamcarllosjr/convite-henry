@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convite - Aventura Épica!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Russo+One&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #001a33 0%, #003366 25%, #0066cc 50%, #0099ff 75%, #00ccff 100%);
+            font-family: 'Russo One', sans-serif;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Estrelas animadas no fundo */
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* Anéis flutuantes */
+        .floating-rings {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .ring {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #FFD700;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            animation: float 8s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+            50% { transform: translateY(-100vh) rotate(360deg); opacity: 1; }
+        }
+
+        .invite-container {
+            width: 700px;
+            max-width: 95%;
+            background: linear-gradient(180deg, #FF4500 0%, #FF6347 50%, #FF8C00 100%);
+            border-radius: 40px;
+            padding: 0;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+            border: 10px solid #FFD700;
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Header com Green Hill Zone */
+        .header {
+            background: linear-gradient(180deg, #87CEEB 0%, #4682B4 100%);
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 8px solid #228B22;
+        }
+
+        .clouds {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 100px;
+            opacity: 0.8;
+            animation: moveCloud 20s linear infinite;
+        }
+
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 100px;
+        }
+
+        .cloud1 { width: 80px; height: 30px; top: 20%; left: -80px; }
+        .cloud1::before { width: 40px; height: 40px; top: -15px; left: 10px; }
+        .cloud1::after { width: 50px; height: 35px; top: -10px; right: 10px; }
+
+        .cloud2 { width: 100px; height: 40px; top: 60%; left: -100px; animation-delay: 5s; }
+        .cloud2::before { width: 50px; height: 50px; top: -20px; left: 15px; }
+        .cloud2::after { width: 60px; height: 45px; top: -15px; right: 15px; }
+
+        @keyframes moveCloud {
+            from { transform: translateX(0); }
+            to { transform: translateX(calc(100vw + 200px)); }
+        }
+
+        .title {
+            font-family: 'Bangers', cursive;
+            font-size: 70px;
+            color: #0066FF;
+            text-shadow: 
+                4px 4px 0 #003399,
+                8px 8px 0 #FFD700,
+                12px 12px 20px rgba(0, 0, 0, 0.5);
+            letter-spacing: 5px;
+            margin-bottom: 10px;
+            transform: rotate(-3deg);
+            animation: pulse 2s infinite;
+            position: relative;
+            z-index: 10;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: rotate(-3deg) scale(1); }
+            50% { transform: rotate(-3deg) scale(1.05); }
+        }
+
+        .subtitle {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 16px;
+            color: #FFD700;
+            text-shadow: 2px 2px 0 #000;
+            position: relative;
+            z-index: 10;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.5; }
+        }
+
+        /* Sonic correndo */
+        .sonic-runner {
+            width: 100%;
+            height: 150px;
+            position: relative;
+            background: linear-gradient(180deg, #228B22 0%, #32CD32 100%);
+            border-top: 5px solid #8B4513;
+            border-bottom: 5px solid #8B4513;
+            overflow: hidden;
+        }
+
+        /* Palmeiras */
+        .palm {
+            position: absolute;
+            bottom: 0;
+            width: 60px;
+            height: 100px;
+            background: #8B4513;
+            border-radius: 10px;
+        }
+
+        .palm::before {
+            content: '🌴';
+            position: absolute;
+            font-size: 50px;
+            top: -30px;
+            left: 5px;
+        }
+
+        .palm1 { left: 10%; }
+        .palm2 { left: 40%; }
+        .palm3 { left: 70%; }
+
+        /* Conteúdo principal */
+        .content {
+            padding: 40px;
+            position: relative;
+        }
+
+        /* Caixa de anéis coletados */
+        .rings-counter {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border: 5px solid #FF4500;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: shine 2s infinite;
+        }
+
+        @keyframes shine {
+            0%, 100% { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
+            50% { box-shadow: 0 10px 40px rgba(255, 215, 0, 0.8); }
+        }
+
+        .rings-counter h2 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            color: #FF4500;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 0 #FFF;
+        }
+
+        .ring-icon {
+            width: 60px;
+            height: 60px;
+            border: 8px solid #FFD700;
+            border-radius: 50%;
+            margin: 10px auto;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8), inset 0 0 20px rgba(255, 165, 0, 0.5);
+            animation: spinRing 2s linear infinite;
+            position: relative;
+        }
+
+        .ring-icon::after {
+            content: '💎';
+            position: absolute;
+            font-size: 30px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spinRing {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        /* Detalhes da festa */
+        .details-box {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F0F0F0 100%);
+            border: 6px solid #0066FF;
+            border-radius: 25px;
+            padding: 30px;
+            margin: 25px 0;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .details-box::before {
+            content: '⚡';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            background: #FFD700;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid #FF4500;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            font-size: 18px;
+            color: #003399;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            border-left: 5px solid #FF4500;
+            transition: transform 0.3s;
+        }
+
+        .detail-item:hover {
+            transform: translateX(10px);
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .detail-icon {
+            font-size: 30px;
+            margin-right: 15px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .detail-item strong {
+            color: #FF4500;
+            margin-right: 10px;
+            font-family: 'Bangers', cursive;
+            font-size: 22px;
+        }
+
+        /* Linhas de velocidade */
+        .speed-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .speed-line {
+            position: absolute;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #FF4500, transparent);
+            animation: speedZoom 1s ease-in-out infinite;
+            width: 100%;
+        }
+
+        .speed-line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .speed-line:nth-child(2) { top: 40%; animation-delay: 0.2s; }
+        .speed-line:nth-child(3) { top: 60%; animation-delay: 0.4s; }
+        .speed-line:nth-child(4) { top: 80%; animation-delay: 0.6s; }
+
+        @keyframes speedZoom {
+            0% { transform: translateX(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+
+        /* Botão estilo Sonic */
+        .action-zone {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .sonic-button {
+            background: linear-gradient(180deg, #FF0000 0%, #CC0000 100%);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-family: 'Bangers', cursive;
+            font-size: 28px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #990000, 0 15px 30px rgba(0, 0, 0, 0.4);
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 2px;
+        }
+
+        .sonic-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .sonic-button:hover::before {
+            left: 100%;
+        }
+
+        .sonic-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 13px 0 #990000, 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .sonic-button:active {
+            transform: translateY(5px);
+            box-shadow: 0 3px 0 #990000, 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(180deg, #003399 0%, #001a66 100%);
+            padding: 30px;
+            text-align: center;
+            border-radius: 0 0 30px 30px;
+            position: relative;
+        }
+
+        .footer-text {
+            font-family: 'Bangers', cursive;
+            font-size: 24px;
+            color: #FFD700;
+            text-shadow: 2px 2px 0 #000;
+            margin-bottom: 10px;
+        }
+
+        .footer-subtext {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            color: #00CCFF;
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        /* Efeito de emeralds do caos */
+        .chaos-emeralds {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .emerald {
+            width: 30px;
+            height: 40px;
+            background: linear-gradient(135deg, #00FF00 0%, #00CC00 100%);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            animation: emeraldGlow 2s infinite;
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .emerald:nth-child(1) { background: linear-gradient(135deg, #00FF00 0%, #00CC00 100%); color: #00FF00; }
+        .emerald:nth-child(2) { background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%); color: #FF0000; animation-delay: 0.3s; }
+        .emerald:nth-child(3) { background: linear-gradient(135deg, #0000FF 0%, #0000CC 100%); color: #0000FF; animation-delay: 0.6s; }
+        .emerald:nth-child(4) { background: linear-gradient(135deg, #FFFF00 0%, #CCCC00 100%); color: #FFFF00; animation-delay: 0.9s; }
+        .emerald:nth-child(5) { background: linear-gradient(135deg, #00FFFF 0%, #00CCCC 100%); color: #00FFFF; animation-delay: 1.2s; }
+        .emerald:nth-child(6) { background: linear-gradient(135deg, #FFA500 0%, #CC8400 100%); color: #FFA500; animation-delay: 1.5s; }
+        .emerald:nth-child(7) { background: linear-gradient(135deg, #FF00FF 0%, #CC00CC 100%); color: #FF00FF; animation-delay: 1.8s; }
+
+        @keyframes emeraldGlow {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.2); filter: brightness(1.5); }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .invite-container {
+                width: 100%;
+                max-width: 100%;
+                border-width: 6px;
+                border-radius: 25px;
+            }
+
+            .header {
+                padding: 25px 15px;
+            }
+
+            .title { 
+                font-size: 45px;
+                text-shadow: 
+                    3px 3px 0 #003399,
+                    6px 6px 0 #FFD700,
+                    9px 9px 15px rgba(0, 0, 0, 0.5);
+            }
+            
+            .subtitle { 
+                font-size: 10px;
+                letter-spacing: 1px;
+            }
+
+            .sonic-runner {
+                height: 100px;
+            }
+
+            .palm {
+                width: 40px;
+                height: 70px;
+            }
+
+            .palm::before {
+                font-size: 35px;
+                top: -25px;
+                left: 2px;
+            }
+
+            .content {
+                padding: 25px 20px;
+            }
+
+            .rings-counter {
+                padding: 15px;
+                margin: 15px 0;
+            }
+
+            .rings-counter h2 {
+                font-size: 11px;
+            }
+
+            .ring-icon {
+                width: 45px;
+                height: 45px;
+                border-width: 6px;
+            }
+
+            .ring-icon::after {
+                font-size: 22px;
+            }
+
+            .details-box {
+                padding: 25px 15px;
+                margin: 20px 0;
+                border-width: 4px;
+            }
+
+            .details-box::before {
+                font-size: 30px;
+                width: 50px;
+                height: 50px;
+                border-width: 4px;
+            }
+
+            .detail-item {
+                font-size: 14px;
+                margin: 12px 0;
+                padding: 10px;
+                flex-wrap: wrap;
+                border-left-width: 4px;
+            }
+
+            .detail-icon {
+                font-size: 24px;
+                margin-right: 10px;
+            }
+
+            .detail-item strong {
+                font-size: 16px;
+                min-width: 70px;
+            }
+
+            .detail-item span {
+                flex: 1;
+                min-width: 100%;
+                margin-top: 5px;
+            }
+
+            .chaos-emeralds {
+                gap: 8px;
+                margin: 15px 0;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .emerald {
+                width: 25px;
+                height: 35px;
+            }
+
+            .action-zone {
+                margin: 25px 0;
+            }
+
+            .sonic-button { 
+                font-size: 20px;
+                padding: 15px 30px;
+                letter-spacing: 1px;
+            }
+
+            .footer {
+                padding: 20px 15px;
+            }
+
+            .footer-text {
+                font-size: 18px;
+            }
+
+            .footer-subtext {
+                font-size: 9px;
+            }
+
+            .speed-line {
+                height: 2px;
+            }
+
+            /* Reduzir anéis flutuantes no mobile */
+            .ring {
+                width: 30px;
+                height: 30px;
+                border-width: 3px;
+            }
+
+            /* Ajustar nuvens */
+            .cloud1 { width: 60px; height: 25px; }
+            .cloud1::before { width: 30px; height: 30px; }
+            .cloud1::after { width: 40px; height: 28px; }
+
+            .cloud2 { width: 80px; height: 35px; }
+            .cloud2::before { width: 40px; height: 40px; }
+            .cloud2::after { width: 50px; height: 38px; }
+        }
+
+        @media (max-width: 480px) {
+            .title { 
+                font-size: 38px;
+            }
+            
+            .subtitle { 
+                font-size: 9px;
+            }
+
+            .sonic-runner {
+                height: 80px;
+            }
+
+            .palm {
+                width: 35px;
+                height: 60px;
+            }
+
+            .palm::before {
+                font-size: 28px;
+                top: -20px;
+            }
+
+            .detail-item {
+                font-size: 13px;
+            }
+
+            .detail-icon {
+                font-size: 20px;
+            }
+
+            .detail-item strong {
+                font-size: 15px;
+            }
+
+            .sonic-button { 
+                font-size: 18px;
+                padding: 12px 25px;
+            }
+
+            .footer-text {
+                font-size: 16px;
+            }
+
+            .emerald {
+                width: 22px;
+                height: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Estrelas no fundo -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- Anéis flutuantes -->
+    <div class="floating-rings" id="floatingRings"></div>
+
+    <div class="invite-container">
+        <!-- Speed lines -->
+        <div class="speed-effect">
+            <div class="speed-line"></div>
+            <div class="speed-line"></div>
+            <div class="speed-line"></div>
+            <div class="speed-line"></div>
+        </div>
+
+        <!-- Header com céu e nuvens -->
+        <div class="header">
+            <div class="clouds">
+                <div class="cloud cloud1"></div>
+                <div class="cloud cloud2"></div>
+            </div>
+            <h1 class="title">SONIC</h1>
+            <p class="subtitle">⚡ Aventura Épica ⚡</p>
+        </div>
+
+        <!-- Sonic correndo na Green Hill Zone -->
+        <div class="sonic-runner">
+            <div class="palm palm1"></div>
+            <div class="palm palm2"></div>
+            <div class="palm palm3"></div>
+        </div>
+
+        <!-- Conteúdo -->
+        <div class="content">
+            <!-- Contador de anéis -->
+            <div class="rings-counter">
+                <h2>⭐ COLETE ESTE CONVITE! ⭐</h2>
+                <div class="ring-icon"></div>
+            </div>
+
+            <!-- Detalhes da festa -->
+            <div class="details-box">
+                <div class="detail-item">
+                    <span class="detail-icon">🎂</span>
+                    <strong>HERÓI:</strong>
+                    <span>Henry</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-icon">📅</span>
+                    <strong>DATA:</strong>
+                    <span>21/12/2025</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-icon">⏰</span>
+                    <strong>HORÁRIO:</strong>
+                    <span>15:00</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-icon">📍</span>
+                    <strong>LOCAL:</strong>
+                    <span>Avenida Cásper Líbero, 1044</span>
+                </div>
+            </div>
+
+            <!-- Chaos Emeralds -->
+            <div class="chaos-emeralds">
+                <div class="emerald"></div>
+                <div class="emerald"></div>
+                <div class="emerald"></div>
+                <div class="emerald"></div>
+                <div class="emerald"></div>
+                <div class="emerald"></div>
+                <div class="emerald"></div>
+            </div>
+
+            <!-- Botão de confirmação -->
+            <div class="action-zone">
+                <button class="sonic-button" onclick="confirmarPresenca()">
+                    🚀 CONFIRMAR PRESENÇA 🚀
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p class="footer-text">PREPARE-SE PARA A VELOCIDADE!</p>
+            <p class="footer-subtext">⚡ GOTTA GO FAST! ⚡</p>
+        </div>
+    </div>
+
+    <script>
+        // Criar estrelas
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 2 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Criar anéis flutuantes
+        const ringsContainer = document.getElementById('floatingRings');
+        for (let i = 0; i < 10; i++) {
+            const ring = document.createElement('div');
+            ring.className = 'ring';
+            ring.style.left = Math.random() * 100 + '%';
+            ring.style.bottom = '-50px';
+            ring.style.animationDelay = Math.random() * 8 + 's';
+            ring.style.animationDuration = (8 + Math.random() * 4) + 's';
+            ringsContainer.appendChild(ring);
+        }
+
+        // Função de confirmação do WhatsApp
+        function confirmarPresenca() {
+            // Substitua pelo número do WhatsApp (com código do país)
+            const numeroWhatsApp = '5516993102410';
+            
+            // Mensagem temática do Sonic
+            const mensagem = '⚡ Chaos Emerald coletada ! Presença 100% confirmada ! Nada vai me segurar ! GOTTA GO FAST!';
+            
+            const mensagemCodificada = encodeURIComponent(mensagem);
+            const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
+            
+            window.open(linkWhatsApp, '_blank');
+        }
+
+        // Efeito sonoro ao passar o mouse no botão (opcional)
+        const button = document.querySelector('.sonic-button');
+        button.addEventListener('mouseenter', () => {
+            button.style.transform = 'translateY(-5px) scale(1.05)';
+        });
+        button.addEventListener('mouseleave', () => {
+            button.style.transform = 'translateY(0) scale(1)';
+        });
+    </script>
+</body>
+</html>
